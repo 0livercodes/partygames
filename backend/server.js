@@ -59,9 +59,17 @@ app.get('/api/roles/:gameType', (req, res) => {
   const { gameType } = req.params;
   
   if (gameType === 'tit-albert') {
+    // Filter out basic roles (TIT_ALBERT and VILAZWAS) to get special roles
+    const specialRoles = {};
+    Object.entries(ROLES).forEach(([key, role]) => {
+      if (key !== ROLE_NAMES.TIT_ALBERT && key !== ROLE_NAMES.VILAZWAS) {
+        specialRoles[key] = role;
+      }
+    });
+    
     res.json({
       roles: ROLES,
-      specialRoles: SPECIAL_ROLES
+      specialRoles: specialRoles
     });
   } else {
     res.status(404).json({ error: 'Game type not found' });
@@ -496,25 +504,37 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', players: gameState.players.size });
 });
 
-// Get server IP for QR code generation
+// Get server URL for QR code generation
 app.get('/api/server-info', (req, res) => {
-  const os = require('os');
-  const interfaces = os.networkInterfaces();
-  let localIP = 'localhost';
+  let serverUrl;
   
-  // Find local IP address
-  Object.keys(interfaces).forEach((ifname) => {
-    interfaces[ifname].forEach((iface) => {
-      if (iface.family === 'IPv4' && !iface.internal) {
-        localIP = iface.address;
-      }
+  if (process.env.NODE_ENV === 'production') {
+    // In production, use the deployed URL
+    // Render.com provides RENDER_EXTERNAL_URL environment variable
+    serverUrl = process.env.RENDER_EXTERNAL_URL || 
+                process.env.HEROKU_APP_NAME ? `https://${process.env.HEROKU_APP_NAME}.herokuapp.com` :
+                req.get('host') ? `${req.protocol}://${req.get('host')}` :
+                'https://your-app-name.onrender.com'; // fallback
+  } else {
+    // In development, find local IP for network access
+    const os = require('os');
+    const interfaces = os.networkInterfaces();
+    let localIP = 'localhost';
+    
+    Object.keys(interfaces).forEach((ifname) => {
+      interfaces[ifname].forEach((iface) => {
+        if (iface.family === 'IPv4' && !iface.internal) {
+          localIP = iface.address;
+        }
+      });
     });
-  });
+    
+    serverUrl = `http://${localIP}:${PORT}`;
+  }
   
   res.json({
-    ip: localIP,
-    port: PORT,
-    url: `http://${localIP}:${PORT}`
+    url: serverUrl,
+    environment: process.env.NODE_ENV || 'development'
   });
 });
 
