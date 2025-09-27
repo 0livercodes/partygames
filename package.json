@@ -2,8 +2,9 @@
   "name": "ti-albert-full-stack",
   "version": "1.0.0",
   "scripts": {
-    "heroku-postbuild": "cd frontend && npm install && npm run build",
-    "start": "cd backend && npm start"
+    "build": "echo 'Building frontend...' && cd frontend && npm install && npm run build && echo 'Frontend build complete'",
+    "start": "cd backend && npm start",
+    "heroku-postbuild": "npm run build"
   },
   "engines": {
     "node": ">=16.0.0"

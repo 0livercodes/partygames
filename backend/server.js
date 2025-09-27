@@ -27,12 +27,31 @@ app.use(express.json());
 
 // Serve static files from React build in production
 if (process.env.NODE_ENV === 'production') {
-  app.use(express.static(path.join(__dirname, '../frontend/build')));
+  const buildPath = path.join(__dirname, '../frontend/build');
+  console.log('Looking for frontend build at:', buildPath);
   
-  // Handle React routing, return all requests to React app
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../frontend/build', 'index.html'));
-  });
+  // Check if build directory exists
+  const fs = require('fs');
+  if (fs.existsSync(buildPath)) {
+    console.log('✅ Frontend build directory found');
+    app.use(express.static(buildPath));
+    
+    // Handle React routing, return all requests to React app
+    app.get('*', (req, res) => {
+      const indexPath = path.join(buildPath, 'index.html');
+      console.log('Serving index.html from:', indexPath);
+      res.sendFile(indexPath);
+    });
+  } else {
+    console.log('❌ Frontend build directory not found at:', buildPath);
+    console.log('Available files in parent directory:');
+    try {
+      const parentDir = path.join(__dirname, '..');
+      console.log(fs.readdirSync(parentDir));
+    } catch (err) {
+      console.log('Could not list parent directory:', err.message);
+    }
+  }
 }
 
 // Game state
