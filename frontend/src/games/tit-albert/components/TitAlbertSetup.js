@@ -77,7 +77,7 @@ const TitAlbertSetup = () => {
       { id: TIT_ALBERT_ROLE_NAMES.AGWA, name: TIT_ALBERT_ROLE_NAMES.AGWA, description: roleDescriptions[TIT_ALBERT_ROLE_NAMES.AGWA] || 'Loading...' },
       { id: TIT_ALBERT_ROLE_NAMES.LONGANIS, name: TIT_ALBERT_ROLE_NAMES.LONGANIS, description: roleDescriptions[TIT_ALBERT_ROLE_NAMES.LONGANIS] || 'Loading...' },
       { id: TIT_ALBERT_ROLE_NAMES.TIFI, name: TIT_ALBERT_ROLE_NAMES.TIFI, description: roleDescriptions[TIT_ALBERT_ROLE_NAMES.TIFI] || 'Loading...' },
-      { id: TIT_ALBERT_ROLE_NAMES.VOLER, name: TIT_ALBERT_ROLE_NAMES.VOLER, description: roleDescriptions[TIT_ALBERT_ROLE_NAMES.VOLER] || 'Loading...' }
+      { id: TIT_ALBERT_ROLE_NAMES.VOLER, name: TIT_ALBERT_ROLE_NAMES.VOLER, description: roleDescriptions[TIT_ALBERT_ROLE_NAMES.VOLER] || 'Loading...' },
     ];
   };
 

@@ -25,34 +25,7 @@ const PORT = process.env.PORT || 3001;
 app.use(cors());
 app.use(express.json());
 
-// Serve static files from React build in production
-if (process.env.NODE_ENV === 'production') {
-  const buildPath = path.join(__dirname, '../build');
-  console.log('Looking for frontend build at:', buildPath);
-  
-  // Check if build directory exists
-  const fs = require('fs');
-  if (fs.existsSync(buildPath)) {
-    console.log('✅ Frontend build directory found');
-    app.use(express.static(buildPath));
-    
-    // Handle React routing, return all requests to React app
-    app.get('*', (req, res) => {
-      const indexPath = path.join(buildPath, 'index.html');
-      console.log('Serving index.html from:', indexPath);
-      res.sendFile(indexPath);
-    });
-  } else {
-    console.log('❌ Frontend build directory not found at:', buildPath);
-    console.log('Available files in parent directory:');
-    try {
-      const parentDir = path.join(__dirname, '..');
-      console.log(fs.readdirSync(parentDir));
-    } catch (err) {
-      console.log('Could not list parent directory:', err.message);
-    }
-  }
-}
+// Static files will be served at the end of the file
 
 // API Routes
 app.get('/api/roles/:gameType', (req, res) => {
