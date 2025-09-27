@@ -34,7 +34,9 @@ const JoinGame = () => {
     }
 
     // Connect to socket server
-    const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001';
+    const backendUrl = process.env.NODE_ENV === 'production' 
+      ? window.location.origin 
+      : (process.env.REACT_APP_BACKEND_URL || 'http://localhost:3001');
     const newSocket = io(backendUrl);
     setSocket(newSocket);
 
