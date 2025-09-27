@@ -54,6 +54,20 @@ if (process.env.NODE_ENV === 'production') {
   }
 }
 
+// API Routes
+app.get('/api/roles/:gameType', (req, res) => {
+  const { gameType } = req.params;
+  
+  if (gameType === 'tit-albert') {
+    res.json({
+      roles: ROLES,
+      specialRoles: SPECIAL_ROLES
+    });
+  } else {
+    res.status(404).json({ error: 'Game type not found' });
+  }
+});
+
 // Game state
 const gameState = new GameState();
 

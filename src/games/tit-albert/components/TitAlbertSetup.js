@@ -18,15 +18,28 @@ const TitAlbertSetup = () => {
   const [error, setError] = useState('');
   const [qrCodeUrl, setQrCodeUrl] = useState('');
   const [serverUrl, setServerUrl] = useState('');
+  const [roleDescriptions, setRoleDescriptions] = useState({});
 
   useEffect(() => {
-    // Get server info for QR code
-    const fetchServerInfo = async () => {
+    const initializeComponent = async () => {
+      const backendUrl = process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:3001';
+      
       try {
-        const backendUrl = process.env.NODE_ENV === 'production' ? window.location.origin : 'http://localhost:3001';
-        const response = await fetch(`${backendUrl}/api/server-info`);
-        const data = await response.json();
-        const url = data.url;
+        // Fetch role descriptions from backend
+        const rolesResponse = await fetch(`${backendUrl}/api/roles/tit-albert`);
+        const rolesData = await rolesResponse.json();
+        
+        // Convert roles data to descriptions object
+        const descriptions = {};
+        Object.entries(rolesData.specialRoles).forEach(([key, role]) => {
+          descriptions[key] = role.description;
+        });
+        setRoleDescriptions(descriptions);
+        
+        // Get server info for QR code
+        const serverResponse = await fetch(`${backendUrl}/api/server-info`);
+        const serverData = await serverResponse.json();
+        const url = serverData.url;
         setServerUrl(url);
         
         // Generate QR code
@@ -40,7 +53,7 @@ const TitAlbertSetup = () => {
         });
         setQrCodeUrl(qrUrl);
       } catch (err) {
-        console.error('Failed to get server info:', err);
+        console.error('Failed to initialize component:', err);
         // Fallback to localhost with correct port
         const fallbackUrl = `http://localhost:3000`;
         setServerUrl(fallbackUrl);
@@ -55,18 +68,18 @@ const TitAlbertSetup = () => {
         setQrCodeUrl(qrUrl);
       }
     };
-
-    fetchServerInfo();
-  }, []);
-
-  const specialRolesList = [
-    { id: TIT_ALBERT_ROLE_NAMES.BHAI_LOOKE, name: TIT_ALBERT_ROLE_NAMES.BHAI_LOOKE, description: 'The Seer - can see one player\'s role each night' },
-    { id: TIT_ALBERT_ROLE_NAMES.CLIFFEURD, name: TIT_ALBERT_ROLE_NAMES.CLIFFEURD, description: 'The Doctor - can protect one player each night' },
-    { id: TIT_ALBERT_ROLE_NAMES.AGWA, name: TIT_ALBERT_ROLE_NAMES.AGWA, description: 'The Bodyguard - can protect players during day phase' },
-    { id: TIT_ALBERT_ROLE_NAMES.LONGANIS, name: TIT_ALBERT_ROLE_NAMES.LONGANIS, description: 'The Hunter - can eliminate someone when eliminated' },
-    { id: TIT_ALBERT_ROLE_NAMES.TIFI, name: TIT_ALBERT_ROLE_NAMES.TIFI, description: 'The Witch - has save and kill potions' },
-    { id: TIT_ALBERT_ROLE_NAMES.VOLER, name: TIT_ALBERT_ROLE_NAMES.VOLER, description: 'The Thief - can steal roles' }
-  ];
+    
+    initializeComponent();
+  }, []);  const getSpecialRolesList = () => {
+    return [
+      { id: TIT_ALBERT_ROLE_NAMES.BHAI_LOOKE, name: TIT_ALBERT_ROLE_NAMES.BHAI_LOOKE, description: roleDescriptions[TIT_ALBERT_ROLE_NAMES.BHAI_LOOKE] || 'Loading...' },
+      { id: TIT_ALBERT_ROLE_NAMES.CLIFFEURD, name: TIT_ALBERT_ROLE_NAMES.CLIFFEURD, description: roleDescriptions[TIT_ALBERT_ROLE_NAMES.CLIFFEURD] || 'Loading...' },
+      { id: TIT_ALBERT_ROLE_NAMES.AGWA, name: TIT_ALBERT_ROLE_NAMES.AGWA, description: roleDescriptions[TIT_ALBERT_ROLE_NAMES.AGWA] || 'Loading...' },
+      { id: TIT_ALBERT_ROLE_NAMES.LONGANIS, name: TIT_ALBERT_ROLE_NAMES.LONGANIS, description: roleDescriptions[TIT_ALBERT_ROLE_NAMES.LONGANIS] || 'Loading...' },
+      { id: TIT_ALBERT_ROLE_NAMES.TIFI, name: TIT_ALBERT_ROLE_NAMES.TIFI, description: roleDescriptions[TIT_ALBERT_ROLE_NAMES.TIFI] || 'Loading...' },
+      { id: TIT_ALBERT_ROLE_NAMES.VOLER, name: TIT_ALBERT_ROLE_NAMES.VOLER, description: roleDescriptions[TIT_ALBERT_ROLE_NAMES.VOLER] || 'Loading...' }
+    ];
+  };
 
   // Note: Sefvilaz (The Mayor) is not assigned at setup - it's a transferable secondary role during gameplay
 
@@ -153,7 +166,7 @@ const TitAlbertSetup = () => {
             Select additional roles for more interesting gameplay
           </div>
           
-          {specialRolesList.map(role => (
+          {getSpecialRolesList().map(role => (
             <div key={role.id} className="checkbox-container">
               <input
                 type="checkbox"
