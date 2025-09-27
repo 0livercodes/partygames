@@ -2,12 +2,20 @@
   "name": "ti-albert-full-stack",
   "version": "1.0.0",
   "scripts": {
-    "build": "echo 'Building frontend...' && cd frontend && npm install && npm run build && echo 'Frontend build complete'",
-    "start": "cd backend && npm start",
-    "heroku-postbuild": "npm run build"
+    "build": "npm run build:frontend && npm run install:backend",
+    "build:frontend": "react-scripts build",
+    "install:backend": "cd backend && npm install",
+    "start": "cd backend && npm start"
   },
   "engines": {
     "node": ">=16.0.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.15.0",
+    "socket.io-client": "^4.7.2",
+    "qrcode": "^1.5.3",
+    "react-scripts": "5.0.1"
+  }
 }

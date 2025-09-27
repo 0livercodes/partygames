@@ -27,7 +27,7 @@ app.use(express.json());
 
 // Serve static files from React build in production
 if (process.env.NODE_ENV === 'production') {
-  const buildPath = path.join(__dirname, '../frontend/build');
+  const buildPath = path.join(__dirname, '../build');
   console.log('Looking for frontend build at:', buildPath);
   
   // Check if build directory exists
