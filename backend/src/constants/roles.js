@@ -28,7 +28,7 @@ const ROLES = {
   },
   [ROLE_NAMES.VILAZWAS]: {
     name: ROLE_NAMES.VILAZWAS,
-    description: "To enn vilazwas normal. Pandan zour, to vot ar lezot pou esey trouv kisannla ki Tit Albert.",
+    description: "To enn vilazwas normal. Pandan lizour, to vot ar lezot pou esey trouv kisannla ki Tit Albert.",
     team: ROLE_TYPES.VILLAGER,
     icon: "👥"
   },
@@ -40,7 +40,7 @@ const ROLES = {
   },
   [ROLE_NAMES.CLIFFEURD]: {
     name: ROLE_NAMES.CLIFFEURD,
-    description: "Si Tit Albert touy twa, ouswa si bann vilazwas elimin twa, avan to mor to gagn drwa tir enn dimounn ar twa.",
+    description: "To enn Macro. Si Tit Albert touy twa, ouswa si bann vilazwas elimin twa, avan to mor to gagn drwa tir enn dimounn ar twa.",
     team: ROLE_TYPES.VILLAGER,
     icon: "⚕️"
   },
