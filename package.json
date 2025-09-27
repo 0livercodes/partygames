@@ -1,0 +1,12 @@
+{
+  "name": "ti-albert-full-stack",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "cd frontend && npm install && npm run build",
+    "start": "cd backend && npm start",
+    "install-all": "cd frontend && npm install && cd ../backend && npm install"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
