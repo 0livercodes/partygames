@@ -26,8 +26,17 @@ const TitAlbertSetup = () => {
       
       try {
         // Fetch role descriptions from backend
+        console.log('Fetching roles from:', `${backendUrl}/api/roles/tit-albert`);
         const rolesResponse = await fetch(`${backendUrl}/api/roles/tit-albert`);
+        console.log('Roles response status:', rolesResponse.status);
+        console.log('Roles response headers:', rolesResponse.headers.get('content-type'));
+        
+        if (!rolesResponse.ok) {
+          throw new Error(`HTTP error! status: ${rolesResponse.status}`);
+        }
+        
         const rolesData = await rolesResponse.json();
+        console.log('Roles data:', rolesData);
         
         // Convert roles data to descriptions object
         const descriptions = {};
@@ -54,6 +63,7 @@ const TitAlbertSetup = () => {
         setQrCodeUrl(qrUrl);
       } catch (err) {
         console.error('Failed to initialize component:', err);
+        console.error('Error details:', err.message);
         // Fallback to localhost with correct port
         const fallbackUrl = `http://localhost:3000`;
         setServerUrl(fallbackUrl);
